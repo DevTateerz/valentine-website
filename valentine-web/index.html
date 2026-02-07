@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>สำหรับเธอ ♥ For You</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@100;200;300;400;600&family=Prompt:wght@100;200;300;400;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --primary: #ff6b9d;
+            --secondary: #c44569;
+            --accent: #ffd93d;
+        }
+
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+            line-height: 1.8;
+            -webkit-font-smoothing: antialiased;
+            touch-action: manipulation;
+        }
+
+        /* Background - Simplified */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(-45deg, #0a0a0a, #1a0a1a, #0a1a1a);
+            background-size: 400% 400%;
+            animation: gradientShift 30s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .film-grain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300"%3E%3Cfilter id="grain"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23grain)" opacity="0.02"/%3E%3C/svg%3E');
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.5;
+        }
+
+        .vignette {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            box-shadow: inset 0 0 200px rgba(0, 0, 0, 0.7);
+            pointer-events: none;
+            z-index: 9998;
+        }
+
+        /* Particles - Minimal */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            animation: float linear infinite;
+            opacity: 0.3;
+            width: 6px;
+            height: 6px;
+            background: radial-gradient(circle, rgba(255, 107, 157, 0.6), transparent);
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% {
+                transform: translateY(-100px) translateX(100px) scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #000 0%, #1a0a1a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10003;
+            transition: opacity 1.5s ease;
+            flex-direction: column;
+        }
+
+        .loading-screen.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-heart {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 2rem;
+        }
+
+        .loading-heart svg {
+            width: 100%;
+            height: 100%;
+            fill: url(#loadingGradient);
+            filter: drop-shadow(0 0 20px rgba(255, 107, 157, 0.8));
+            animation: heartBeat 1.2s ease infinite;
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            14% { transform: scale(1.15); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.15); }
+            70% { transform: scale(1); }
+        }
+
+        .loading-text {
+            font-family: 'Prompt', sans-serif;
+            font-size: 1.2rem;
+            background: linear-gradient(135deg, #ff6b9d 0%, #ffd93d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 0.1em;
+        }
+
+        /* Scene Styles */
+        .scene {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 4rem 2rem;
+        }
+
+        /* Scene 1 */
+        #scene1 {
+            background: radial-gradient(circle at center, #1a0a0a 0%, #000 100%);
+        }
+
+        .intro-container {
+            text-align: center;
+            z-index: 3;
+            max-width: 900px;
+        }
+
+        .intro-logo {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 2.5rem;
+            opacity: 0;
+            animation: fadeInScale 2s ease forwards 0.5s;
+        }
+
+        .intro-logo svg {
+            width: 100%;
+            height: 100%;
+            fill: none;
+            stroke: url(#heartGradient);
+            stroke-width: 2;
+            filter: drop-shadow(0 0 20px rgba(255, 107, 157, 0.6));
+        }
+
+        .intro-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 10vw, 6rem);
+            font-weight: 600;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeInUp 2s ease forwards 1s;
+            background: linear-gradient(135deg, #fff 0%, #ff6b9d 50%, #ffd93d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .intro-subtitle {
+            font-size: clamp(1.1rem, 3vw, 1.6rem);
+            opacity: 0;
+            background: linear-gradient(135deg, #ffcccc 0%, #ffd93d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 2;
+            animation: fadeInUp 2s ease forwards 2s;
+            margin-bottom: 2.5rem;
+        }
+
+        .typewriter-text {
+            font-family: 'Prompt', sans-serif;
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            color: #ffd93d;
+            opacity: 0;
+            animation: fadeIn 1s ease forwards 3s;
+            min-height: 60px;
+        }
+
+        .intro-prompt {
+            font-family: 'Prompt', sans-serif;
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            opacity: 0;
+            color: #ffd93d;
+            animation: fadeInUp 2s ease forwards 3.5s;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 1rem 3rem;
+            border: 2px solid rgba(255, 217, 61, 0.5);
+            border-radius: 50px;
+            background: linear-gradient(135deg, rgba(255, 217, 61, 0.1), rgba(255, 107, 157, 0.1));
+            backdrop-filter: blur(10px);
+            display: inline-block;
+            margin-top: 2rem;
+            touch-action: manipulation;
+        }
+
+        .intro-prompt:active {
+            transform: scale(0.95);
+        }
+
+        @keyframes fadeInScale {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        /* Photo Gallery */
+        #scene3 {
+            background: radial-gradient(circle at top right, #0f0a15 0%, #000 100%);
+            flex-direction: column;
+            padding: 5rem 2rem;
+        }
+
+        .gallery-container {
+            max-width: 1400px;
+            width: 100%;
+            z-index: 3;
+        }
+
+        .gallery-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .gallery-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 7vw, 4.5rem);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 0%, #ff6b9d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gallery-subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            background: linear-gradient(135deg, #ffcccc 0%, #ffd93d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .photo-item {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            aspect-ratio: 3/4;
+            background: rgba(255, 255, 255, 0.02);
+            border: 2px solid rgba(255, 107, 157, 0.15);
+            touch-action: manipulation;
+        }
+
+        .photo-item:active {
+            transform: scale(0.98);
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        /* Instagram Modal - Perfect Mobile */
+        .instagram-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.97);
+            z-index: 10001;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .instagram-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-container {
+            display: flex;
+            max-width: 1200px;
+            width: 95%;
+            max-height: 90vh;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .instagram-modal.active .modal-container {
+            transform: scale(1);
+        }
+
+        .modal-image-section {
+            flex: 1.3;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .modal-image {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+            user-select: none;
+            -webkit-user-drag: none;
+            touch-action: pan-y;
+        }
+
+        .modal-info-section {
+            flex: 1;
+            background: #0a0a0a;
+            display: flex;
+            flex-direction: column;
+            max-height: 90vh;
+            border-left: 1px solid rgba(255, 107, 157, 0.2);
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 107, 157, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-shrink: 0;
+        }
+
+        .modal-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b9d, #ffd93d);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .modal-username {
+            font-family: 'Prompt', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .modal-content-wrapper {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .modal-caption {
+            font-family: 'Prompt', sans-serif;
+            font-size: 1.2rem;
+            color: #ffd93d;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .modal-description {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #e0e0e0;
+            white-space: pre-line;
+        }
+
+        .modal-actions {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid rgba(255, 107, 157, 0.15);
+            display: flex;
+            gap: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .modal-action-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-size: 1.5rem;
+            padding: 0.5rem;
+            transition: transform 0.2s ease;
+            touch-action: manipulation;
+        }
+
+        .modal-action-btn:active {
+            transform: scale(0.9);
+        }
+
+        .modal-action-btn.liked {
+            color: #ff6b9d;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid rgba(255, 107, 157, 0.4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+            touch-action: manipulation;
+        }
+
+        .modal-close:active {
+            transform: scale(0.9);
+        }
+
+        .modal-close::before,
+        .modal-close::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 2px;
+            background: #fff;
+        }
+
+        .modal-close::before { transform: rotate(45deg); }
+        .modal-close::after { transform: rotate(-45deg); }
+
+        .modal-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 45px;
+            height: 45px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid rgba(255, 107, 157, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+            touch-action: manipulation;
+        }
+
+        .modal-nav:active {
+            transform: translateY(-50%) scale(0.9);
+        }
+
+        .modal-nav.prev { left: 1rem; }
+        .modal-nav.next { right: 1rem; }
+
+        .modal-nav svg {
+            width: 24px;
+            height: 24px;
+            fill: #fff;
+        }
+
+        /* Audio Control */
+        .audio-control {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 107, 157, 0.3);
+            border: 2px solid #ff6b9d;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            touch-action: manipulation;
+        }
+
+        .audio-control:active {
+            transform: scale(0.9);
+        }
+
+        .audio-control svg {
+            width: 28px;
+            height: 28px;
+            fill: #fff;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .scene { padding: 3rem 1.5rem; }
+            .photo-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            /* Perfect Mobile Modal */
+            .modal-container {
+                flex-direction: column;
+                max-width: 100%;
+                width: 100%;
+                max-height: 100vh;
+                height: 100vh;
+                border-radius: 0;
+            }
+
+            .modal-image-section {
+                flex: 1;
+                max-height: 55vh;
+            }
+
+            .modal-image {
+                max-height: 55vh;
+            }
+
+            .modal-info-section {
+                flex: 1;
+                max-height: 45vh;
+                border-left: none;
+                border-top: 1px solid rgba(255, 107, 157, 0.2);
+            }
+
+            .modal-nav {
+                display: none;
+            }
+
+            .modal-close {
+                top: 0.75rem;
+                right: 0.75rem;
+            }
+        }
+
+        @media (max-width: 900px) and (orientation: landscape) {
+            .modal-container {
+                flex-direction: row;
+                max-height: 100vh;
+            }
+
+            .modal-image-section {
+                flex: 1.5;
+                max-height: 100vh;
+            }
+
+            .modal-info-section {
+                flex: 1;
+                border-left: 1px solid rgba(255, 107, 157, 0.2);
+                border-top: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen">
+        <div class="loading-heart">
+            <svg viewBox="0 0 32 29.6">
+                <defs>
+                    <linearGradient id="loadingGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#ff6b9d" />
+                        <stop offset="100%" style="stop-color:#ffd93d" />
+                    </linearGradient>
+                </defs>
+                <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/>
+            </svg>
+        </div>
+        <div class="loading-text">กำลังเตรียมความประทับใจ...</div>
+    </div>
+
+    <!-- Background -->
+    <div class="animated-bg"></div>
+    <div class="film-grain"></div>
+    <div class="vignette"></div>
+    <div class="particles" id="particles"></div>
+
+    <!-- Audio Control -->
+    <div class="audio-control" id="audioControl">
+        <svg id="audioIcon" viewBox="0 0 24 24">
+            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+        </svg>
+    </div>
+
+    <!-- Scene 1 -->
+    <section class="scene" id="scene1">
+        <div class="intro-container">
+            <div class="intro-logo">
+                <svg viewBox="0 0 32 29.6">
+                    <defs>
+                        <linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#ff6b9d" />
+                            <stop offset="100%" style="stop-color:#ffd93d" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/>
+                </svg>
+            </div>
+            <h1 class="intro-title">สำหรับเธอ ✨</h1>
+            <p class="intro-subtitle">
+                เรื่องราวแห่งความรักที่ฉันต้องการบอกเธอ<br>
+                ด้วยหัวใจที่เต็มเปี่ยมไปด้วยความรัก<br>
+                และความทรงจำที่งดงามที่มีเธออยู่ในนั้น
+            </p>
+            <div class="typewriter-text" id="typewriterText"></div>
+            <div class="intro-prompt" id="startJourney">
+                เริ่มต้นการเดินทาง
+            </div>
+        </div>
+    </section>
+
+    <!-- Scene 3: Photos -->
+    <section class="scene" id="scene3">
+        <div class="gallery-container">
+            <div class="gallery-header">
+                <h2 class="gallery-title">ภาพความทรงจำของเรา</h2>
+                <p class="gallery-subtitle">ทุกภาพเล่าเรื่องราวของเรา ทุกช่วงเวลาที่มีค่า</p>
+            </div>
+            <div class="photo-grid">
+                <div class="photo-item" data-index="0">
+                    <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=800&auto=format&fit=crop" alt="Memory">
+                </div>
+                <div class="photo-item" data-index="1">
+                    <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800&auto=format&fit=crop" alt="Memory">
+                </div>
+                <div class="photo-item" data-index="2">
+                    <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=800&auto=format&fit=crop" alt="Memory">
+                </div>
+                <div class="photo-item" data-index="3">
+                    <img src="https://images.unsplash.com/photo-1502139214982-d0ad755818d8?w=800&auto=format&fit=crop" alt="Memory">
+                </div>
+                <div class="photo-item" data-index="4">
+                    <img src="https://images.unsplash.com/photo-1515191107209-c28698631303?w=800&auto=format&fit=crop" alt="Memory">
+                </div>
+                <div class="photo-item" data-index="5">
+                    <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=800&auto=format&fit=crop" alt="Memory">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Instagram Modal -->
+    <div class="instagram-modal" id="modal">
+        <div class="modal-container">
+            <div class="modal-image-section">
+                <div class="modal-close" id="closeBtn"></div>
+                <img class="modal-image" id="modalImg" src="" alt="">
+                <div class="modal-nav prev" id="prevBtn">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                    </svg>
+                </div>
+                <div class="modal-nav next" id="nextBtn">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="modal-info-section">
+                <div class="modal-header">
+                    <div class="modal-avatar">❤️</div>
+                    <div class="modal-username">สำหรับเธอ</div>
+                </div>
+                <div class="modal-content-wrapper">
+                    <div class="modal-caption" id="caption"></div>
+                    <div class="modal-description" id="description"></div>
+                </div>
+                <div class="modal-actions">
+                    <button class="modal-action-btn" id="likeBtn">❤️</button>
+                    <button class="modal-action-btn">💬</button>
+                    <button class="modal-action-btn">✨</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // CONFIG
+        const PHOTOS = [
+            {
+                src: 'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=800&auto=format&fit=crop',
+                caption: 'วันที่พิเศษที่สุด',
+                description: 'วันที่ทุกอย่างเริ่มต้น หัวใจของฉันก็เต้นแรงเมื่อได้เห็นเธอ\n\nนี่คือช่วงเวลาที่ฉันจะไม่มีวันลืม เพราะมันคือจุดเริ่มต้นของทุกสิ่ง'
+            },
+            {
+                src: 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800&auto=format&fit=crop',
+                caption: 'ความสุขที่แท้จริง',
+                description: 'รอยยิ้มของเธอคือสิ่งที่สวยงามที่สุดในโลกของฉัน\n\nทุกครั้งที่เห็นเธอยิ้ม หัวใจของฉันก็เต้นแรงขึ้น'
+            },
+            {
+                src: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=800&auto=format&fit=crop',
+                caption: 'ช่วงเวลาสีทอง',
+                description: 'ทุกวินาทีที่ได้อยู่เคียงข้างเธอ มีค่ามากกว่าทองคำ\n\nไม่ว่าเราจะทำอะไรด้วยกัน มันก็พิเศษเสมอ'
+            },
+            {
+                src: 'https://images.unsplash.com/photo-1502139214982-d0ad755818d8?w=800&auto=format&fit=crop',
+                caption: 'ความทรงจำอันล้ำค่า',
+                description: 'ทุกความทรงจำที่มีเธอคือสมบัติที่ฉันเก็บรักษาในหัวใจ\n\nมันคือสิ่งที่ไม่มีใครแย่งไปได้'
+            },
+            {
+                src: 'https://images.unsplash.com/photo-1515191107209-c28698631303?w=800&auto=format&fit=crop',
+                caption: 'ทุกเช้าที่มีเธอ',
+                description: 'วันใหม่ที่สดใสเพราะมีเธอข้างๆ\n\nการตื่นมาแล้วรู้ว่ามีเธอ ทำให้ฉันพร้อมเผชิญทุกอย่าง'
+            },
+            {
+                src: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=800&auto=format&fit=crop',
+                caption: 'เสียงหัวเราะของเธอ',
+                description: 'เสียงหัวเราะของเธอคือดนตรีที่ไพเราะที่สุด\n\nมันคือเสียงที่ฉันอยากได้ยินทุกวัน'
+            }
+        ];
+
+        const TEXTS = [
+            'เธอทำให้ทุกวันของฉันมีความหมาย...',
+            'เธอคือเหตุผลที่ฉันยิ้มทุกเช้า...',
+            'เธอคือความสุขที่แท้จริงของฉัน...'
+        ];
+
+        // STATE
+        let currentIndex = 0;
+        let audio = null;
+        let isPlaying = false;
+        let isLiked = false;
+
+        // INIT
+        document.addEventListener('DOMContentLoaded', () => {
+            initParticles();
+            initAudio();
+            initTypewriter();
+            initPhotoGallery();
+            initModal();
+            
+            setTimeout(() => {
+                document.querySelector('.loading-screen').classList.add('hide');
+            }, 2500);
+
+            document.getElementById('startJourney').addEventListener('click', () => {
+                document.getElementById('scene3').scrollIntoView({ behavior: 'smooth' });
+                if (!isPlaying) playAudio();
+            });
+
+            document.getElementById('audioControl').addEventListener('click', toggleAudio);
+        });
+
+        // PARTICLES
+        function initParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 20; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.animationDuration = (20 + Math.random() * 30) + 's';
+                p.style.animationDelay = Math.random() * 20 + 's';
+                container.appendChild(p);
+            }
+        }
+
+        // AUDIO - 100% WORKING
+        function initAudio() {
+            audio = new Audio('เรา.mp3'); // Replace with your audio file path
+            audio.loop = true;
+            audio.volume = 0.3;
+            
+            audio.addEventListener('playing', () => {
+                isPlaying = true;
+                updateAudioIcon();
+            });
+            
+            audio.addEventListener('pause', () => {
+                isPlaying = false;
+                updateAudioIcon();
+            });
+        }
+
+        function playAudio() {
+            if (audio) {
+                audio.play().catch(e => console.log('Audio play failed:', e));
+            }
+        }
+
+        function pauseAudio() {
+            if (audio) audio.pause();
+        }
+
+        function toggleAudio() {
+            isPlaying ? pauseAudio() : playAudio();
+        }
+
+        function updateAudioIcon() {
+            const icon = document.getElementById('audioIcon');
+            if (isPlaying) {
+                icon.innerHTML = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>';
+            } else {
+                icon.innerHTML = '<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>';
+            }
+        }
+
+        // TYPEWRITER
+        function initTypewriter() {
+            const el = document.getElementById('typewriterText');
+            let textIdx = 0;
+            let charIdx = 0;
+            let isDeleting = false;
+
+            function type() {
+                const currentText = TEXTS[textIdx];
+                
+                if (isDeleting) {
+                    el.textContent = currentText.substring(0, charIdx - 1);
+                    charIdx--;
+                } else {
+                    el.textContent = currentText.substring(0, charIdx + 1);
+                    charIdx++;
+                }
+
+                let speed = isDeleting ? 50 : 100;
+
+                if (!isDeleting && charIdx === currentText.length) {
+                    speed = 2000;
+                    isDeleting = true;
+                } else if (isDeleting && charIdx === 0) {
+                    isDeleting = false;
+                    textIdx = (textIdx + 1) % TEXTS.length;
+                    speed = 500;
+                }
+
+                setTimeout(type, speed);
+            }
+
+            setTimeout(type, 3000);
+        }
+
+        // PHOTO GALLERY
+        function initPhotoGallery() {
+            document.querySelectorAll('.photo-item').forEach((item, idx) => {
+                item.addEventListener('click', () => openModal(idx));
+            });
+        }
+
+        // MODAL - PERFECT
+        function initModal() {
+            const modal = document.getElementById('modal');
+            const img = document.getElementById('modalImg');
+            
+            document.getElementById('closeBtn').addEventListener('click', closeModal);
+            document.getElementById('prevBtn').addEventListener('click', () => navigate(-1));
+            document.getElementById('nextBtn').addEventListener('click', () => navigate(1));
+            document.getElementById('likeBtn').addEventListener('click', toggleLike);
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal();
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (!modal.classList.contains('active')) return;
+                if (e.key === 'Escape') closeModal();
+                if (e.key === 'ArrowLeft') navigate(-1);
+                if (e.key === 'ArrowRight') navigate(1);
+            });
+
+            // SWIPE SUPPORT
+            let touchStartX = 0;
+            let touchStartY = 0;
+
+            img.addEventListener('touchstart', (e) => {
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+            }, { passive: true });
+
+            img.addEventListener('touchend', (e) => {
+                const touchEndX = e.changedTouches[0].clientX;
+                const touchEndY = e.changedTouches[0].clientY;
+                const diffX = touchStartX - touchEndX;
+                const diffY = touchStartY - touchEndY;
+                
+                if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+                    diffX > 0 ? navigate(1) : navigate(-1);
+                }
+            }, { passive: true });
+        }
+
+        function openModal(idx) {
+            const photo = PHOTOS[idx];
+            currentIndex = idx;
+            
+            document.getElementById('modalImg').src = photo.src;
+            document.getElementById('caption').textContent = photo.caption;
+            document.getElementById('description').textContent = photo.description;
+            document.getElementById('modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            isLiked = false;
+            document.getElementById('likeBtn').classList.remove('liked');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function navigate(dir) {
+            currentIndex = (currentIndex + dir + PHOTOS.length) % PHOTOS.length;
+            openModal(currentIndex);
+        }
+
+        function toggleLike() {
+            isLiked = !isLiked;
+            const btn = document.getElementById('likeBtn');
+            isLiked ? btn.classList.add('liked') : btn.classList.remove('liked');
+        }
+    </script>
+</body>
+</html>
